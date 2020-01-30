@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:todayfood/screens/sub_menu_view.dart';
 import 'package:youtube_player/youtube_player.dart';
 
 class MenuView extends StatefulWidget {
   MenuView({Key key, this.food}) : super(key: key);
-  String food;
+  final String food;
   @override
   _MenuViewState createState() => _MenuViewState();
 }
@@ -38,32 +39,32 @@ class _MenuViewState extends State<MenuView> {
             ),
           ),
           Container(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Flex(
-            direction: Axis.vertical,
-            children: <Widget>[
-              Text('Video'),
-              YoutubePlayer(
-                context: context,
-                source: "1DwmWTtTnb0",
-                quality: YoutubeQuality.HD,
-                autoPlay: false,
-                showThumbnail: true,
-                // callbackController is (optional).
-                // use it to control player on your own.
-                // callbackController: (controller) {
-                //   _videoController = controller;
-                // },
-              ),
-            ],
-          )),
+                direction: Axis.vertical,
+                children: <Widget>[
+                  Text('Video'),
+                  YoutubePlayer(
+                    context: context,
+                    source: "1DwmWTtTnb0",
+                    quality: YoutubeQuality.HD,
+                    autoPlay: false,
+                    showThumbnail: true,
+                    // callbackController is (optional).
+                    // use it to control player on your own.
+                    // callbackController: (controller) {
+                    //   _videoController = controller;
+                    // },
+                  ),
+                ],
+              )),
           Flex(
             direction: Axis.vertical,
             children: <Widget>[
               Text('Map'),
               SizedBox(
-                width: MediaQuery.of(context)
-                    .size
-                    .width, // or use fixed size like 200
+                width: MediaQuery.of(context).size.width -
+                    20, // or use fixed size like 200
                 height: 284, //ediaQuery.of(context).size.height,
                 child: GoogleMap(
                   mapType: MapType.hybrid,
@@ -74,7 +75,9 @@ class _MenuViewState extends State<MenuView> {
                 ),
               )
             ],
-          )
+          ),
+          SubMenuView(),
+          SubMenuView(),
           //지
         ],
       ),
