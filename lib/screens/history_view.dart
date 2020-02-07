@@ -27,7 +27,15 @@ class _HistoryViewState extends State<HistoryView> {
       body: ListView.builder(
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
-        return Text('Row $index');
+        return Card(
+          margin: EdgeInsets.all(7),
+          child:Container(
+            child: ListTile(
+              title: Text('Row $index'),
+            ),
+          )
+          
+        );
        },
       ),
     );

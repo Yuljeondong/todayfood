@@ -28,59 +28,81 @@ class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        //crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
-            child: Text(
-              '오늘의 음식은 ${widget.food} 입니다.',
-            ),
-          ),
-          Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Flex(
-                direction: Axis.vertical,
-                children: <Widget>[
-                  Text('Video'),
-                  YoutubePlayer(
-                    context: context,
-                    source: "1DwmWTtTnb0",
-                    quality: YoutubeQuality.HD,
-                    autoPlay: false,
-                    showThumbnail: true,
-                    // callbackController is (optional).
-                    // use it to control player on your own.
-                    // callbackController: (controller) {
-                    //   _videoController = controller;
-                    // },
-                  ),
-                ],
-              )),
-          Flex(
-            direction: Axis.vertical,
+      child: Card(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          //crossAxisAlignment: CrossAxisAlignment.center,
+          elevation: 7,
+          child: ListView(
+            physics: const NeverScrollableScrollPhysics(),
             children: <Widget>[
-              Text('Map'),
-              SizedBox(
-                width: MediaQuery.of(context).size.width -
-                    20, // or use fixed size like 200
-                height: 284, //ediaQuery.of(context).size.height,
-                child: GoogleMap(
-                  mapType: MapType.hybrid,
-                  initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
+              Container(
+                height: 40,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  '오늘의 음식은 ${widget.food} 입니다.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(
+                  height: 239,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: Flex(
+                    direction: Axis.vertical,
+                    children: <Widget>[
+                      Text('Video'),
+                      YoutubePlayer(
+                        context: context,
+                        source: "RT-UHVCcFSA",
+                        quality: YoutubeQuality.HD,
+                        autoPlay: false,
+                        showThumbnail: true,
+                        // callbackController is (optional).
+                        // use it to control player on your own.
+                        // callbackController: (controller) {
+                        //   _videoController = controller;
+                        // },
+                      ),
+                    ],
+                  )),
+              Container(
+                height: 300,
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: <Widget>[
+                    Text('Map'),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width -
+                          20, // or use fixed size like 200
+                      height: 284, //ediaQuery.of(context).size.height,
+                      child: GoogleMap(
+                        mapType: MapType.hybrid,
+                        initialCameraPosition: _kGooglePlex,
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SubMenuView(),
+              SubMenuView(),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: ButtonBar(
+                  buttonMinWidth: 500,
+                  alignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: null,
+                      child: Text('메뉴 결정'),
+                    )
+                  ],
                 ),
               )
+              //지
             ],
-          ),
-          SubMenuView(),
-          SubMenuView(),
-          //지
-        ],
-      ),
+          )),
     );
   }
 }

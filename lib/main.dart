@@ -6,9 +6,11 @@ import 'package:todayfood/screens/page_view.dart';
 import 'package:todayfood/screens/settings.dart';
 
 List<String> foods = ['apple', 'banana', 'orange'];
-Player user = Player()..pid = 0;
+
+PlayerModel player = PlayerModel();
 Future<String> food = File("users.json").readAsString();
 void main() {
+  player.setUserInfo(1);
   runApp(MyApp());
 }
 
@@ -42,6 +44,8 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.pink[300],
+        centerTitle: true,
         title: Text('Today\'s Menu!'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh),onPressed: null,),
