@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todayfood/model/player.dart';
 import 'package:todayfood/screens/page_view.dart';
-import 'package:todayfood/screens/settings.dart';
 
 List<String> foods = ['apple', 'banana', 'orange'];
 
 PlayerModel player = PlayerModel();
-Future<String> food = File("users.json").readAsString();
 void main() {
   player.setUserInfo(1);
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -42,24 +38,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.pink[300],
-        centerTitle: true,
-        title: Text('Today\'s Menu!'),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.refresh),onPressed: null,),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Settings();
-            })),
-          )
-        ],
-      ),
-      body: PageScroller(
-        foods: foods,
+    return ChangeNotifierProvider<PlayerModel>(
+      create: (context) => PlayerModel(),
+      child: PageScroller(
       ),
     );
   }

@@ -1,10 +1,10 @@
+
 import 'package:flutter/material.dart';
-import 'package:todayfood/screens/calendar.dart';
+import 'package:todayfood/screens/history_view.dart';
 import 'package:todayfood/screens/menu_view.dart';
 
 class PageScroller extends StatefulWidget {
-  PageScroller({Key key, this.foods}) : super(key: key);
-  List<String> foods;
+  PageScroller({Key key}) : super(key: key);
   PageController _controller;
   @override
   _PageScrollerState createState() => _PageScrollerState();
@@ -14,23 +14,20 @@ class _PageScrollerState extends State<PageScroller> {
   @override
   void initState() {
     // TODO: implement initState
+    widget._controller = PageController(initialPage: 1);
     super.initState();
-    //widget._controller = new PageController(initialPage: 1);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        //controller: widget._controller,
-        itemCount: widget.foods.length,
-        itemBuilder: (BuildContext context, int index) {
-          // if (index == 0) {
-          //   return Calendar();
-          // }
-          return Container(height:850,child:MenuView(food: widget.foods[index]));
-        },
-      ),
+    return PageView(
+      controller: widget._controller,
+      children: <Widget>[
+        HistoryView(),
+        FoodListView(
+        )
+      ],
     );
   }
 }
+

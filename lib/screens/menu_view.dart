@@ -2,8 +2,54 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:todayfood/model/player.dart';
+import 'package:todayfood/screens/settings.dart';
 import 'package:todayfood/screens/sub_menu_view.dart';
-import 'package:youtube_player/youtube_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+
+class FoodListView extends StatelessWidget {
+  const FoodListView({Key key}) : super(key: key);
+  
+
+  @override
+  Widget build(BuildContext context) {
+    var player = Provider.of<PlayerModel>(context);
+    player.setUserInfo(1);
+    var history = player.getHistory();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.pink[300],
+        centerTitle: true,
+        title: Text("오늘의 메뉴!"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: null,
+          ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return Settings();
+            })),
+          )
+        ],
+      ),
+      body: Container(
+        child: ListView.builder(
+          itemCount: history.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(height: 550, child: MenuView(food: history[index].date.toString()));
+          },
+        ),
+      ),
+    );
+  }
+}
+
+
 
 class MenuView extends StatefulWidget {
   MenuView({Key key, this.food}) : super(key: key);
@@ -25,6 +71,10 @@ class _MenuViewState extends State<MenuView> {
       target: LatLng(37.43296265331129, -122.08832357078792),
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
+
+  YoutubePlayerController _ycontroller = YoutubePlayerController(
+      initialVideoId: "RT-UHVCcFSA",
+      flags: YoutubePlayerFlags(autoPlay: false));
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,59 +86,53 @@ class _MenuViewState extends State<MenuView> {
             physics: const NeverScrollableScrollPhysics(),
             children: <Widget>[
               Container(
-                height: 40,
+                height: 50,
                 padding: EdgeInsets.all(10),
                 child: Text(
-                  '오늘의 음식은 ${widget.food} 입니다.',
+                  '${widget.food}',
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24),
                 ),
               ),
               Container(
-                  height: 239,
+                  height: 207,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Flex(
                     direction: Axis.vertical,
                     children: <Widget>[
-                      Text('Video'),
+                      //Text('Video'),
                       YoutubePlayer(
-                        context: context,
-                        source: "RT-UHVCcFSA",
-                        quality: YoutubeQuality.HD,
-                        autoPlay: false,
-                        showThumbnail: true,
-                        // callbackController is (optional).
-                        // use it to control player on your own.
-                        // callbackController: (controller) {
-                        //   _videoController = controller;
-                        // },
+                        controller: _ycontroller,
+                        showVideoProgressIndicator: true,
+                        //onReady: () {_ycontroller.addListener();},
                       ),
                     ],
                   )),
-              Container(
-                height: 300,
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: <Widget>[
-                    Text('Map'),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width -
-                          20, // or use fixed size like 200
-                      height: 284, //ediaQuery.of(context).size.height,
-                      child: GoogleMap(
-                        mapType: MapType.hybrid,
-                        initialCameraPosition: _kGooglePlex,
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              // Container(
+              //   height: 300,
+              //   child: Flex(
+              //     direction: Axis.vertical,
+              //     children: <Widget>[
+              //       Text('Map'),
+              //       SizedBox(
+              //         width: MediaQuery.of(context).size.width -
+              //             20, // or use fixed size like 200
+              //         height: 284, //ediaQuery.of(context).size.height,
+              //         child: GoogleMap(
+              //           mapType: MapType.hybrid,
+              //           initialCameraPosition: _kGooglePlex,
+              //           onMapCreated: (GoogleMapController controller) {
+              //             _controller.complete(controller);
+              //           },
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
               SubMenuView(),
               SubMenuView(),
               Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: ButtonBar(
                   buttonMinWidth: 500,
                   alignment: MainAxisAlignment.center,

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class PlayerModel extends ChangeNotifier {
   Player _player;
 
-  List<Food> recommendList = [];
+  List<Food> _recommendList = [];
 
   void setUserInfo(int id) async {
     var data;
@@ -32,7 +32,6 @@ class PlayerModel extends ChangeNotifier {
 class Player {
   int pid;
   String name;
-  List<Food> recommended;
   List<Food> favorite;
   List<History> history;
 

@@ -9,7 +9,7 @@ class History {
   History.fromJson(Map<String, dynamic> json)
       : hid = json['hid'],
         fid = json['fid'],
-        date = json['date'];
+        date = DateTime.parse(json['date']);
 
   Map<String, dynamic> toJson() => {
         'hid': hid,

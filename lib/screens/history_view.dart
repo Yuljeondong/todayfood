@@ -8,35 +8,24 @@ class HistoryView extends StatefulWidget {
 }
 
 class _HistoryViewState extends State<HistoryView> {
-  void _back(){
-      Navigator.pop(context);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            // IconButton(
-            //   icon: Icon(Icons.arrow_back),
-            //   onPressed: _back,
-            // )
-          ],
-        ),
+        title: Text('식사 내역'),
       ),
       body: ListView.builder(
         itemCount: 20,
         itemBuilder: (BuildContext context, int index) {
-        return Card(
-          margin: EdgeInsets.all(7),
-          child:Container(
-            child: ListTile(
-              title: Text('Row $index'),
+          return Card(
+            margin: EdgeInsets.all(7),
+            child: Container(
+              child: ListTile(
+                title: Text('Row $index'),
+              ),
             ),
-          )
-          
-        );
-       },
+          );
+        },
       ),
     );
   }
