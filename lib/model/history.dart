@@ -1,19 +1,21 @@
 
+import 'package:todayfood/model/food.dart';
+
 class History {
   int hid;
-  int fid;
+  Food food;
   DateTime date;
 
-  History(this.hid, this.fid, this.date);
+  History(this.hid, this.food, this.date);
 
   History.fromJson(Map<String, dynamic> json)
       : hid = json['hid'],
-        fid = json['fid'],
+        food = Food.fromJson(json['food']),
         date = DateTime.parse(json['date']);
 
   Map<String, dynamic> toJson() => {
         'hid': hid,
-        'fid': fid,
+        'fid': food.fid,
         'date': date,
       };
 }

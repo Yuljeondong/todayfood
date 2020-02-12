@@ -16,8 +16,9 @@ class FoodListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var player = Provider.of<PlayerModel>(context);
-    player.setUserInfo(1);
-    var history = player.getHistory();
+    
+    
+    //var recommend = player.getRecommendList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[300],
@@ -26,7 +27,7 @@ class FoodListView extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: null,
+            onPressed: (){player.refreshRecommendList();},
           ),
           IconButton(
             icon: Icon(Icons.settings),
@@ -39,9 +40,9 @@ class FoodListView extends StatelessWidget {
       ),
       body: Container(
         child: ListView.builder(
-          itemCount: history.length,
+          itemCount: player.getRecommendList().length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(height: 550, child: MenuView(food: history[index].date.toString()));
+            return Container(height: 550, child: MenuView(food: player.getRecommendList()[index].name));
           },
         ),
       ),

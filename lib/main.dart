@@ -3,11 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todayfood/model/player.dart';
 import 'package:todayfood/screens/page_view.dart';
 
-List<String> foods = ['apple', 'banana', 'orange'];
-
-PlayerModel player = PlayerModel();
 void main() {
-  player.setUserInfo(1);
   runApp(MyApp());
 }
 
@@ -39,7 +35,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PlayerModel>(
-      create: (context) => PlayerModel(),
+      create: (context) => PlayerModel(1),
       child: PageScroller(
       ),
     );
