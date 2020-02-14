@@ -31,4 +31,5 @@
             android:value="AIzaSyB4e8AdWbBda1zZJ4El8a_oofPh5HzIbUI"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 </manifest>

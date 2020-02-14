@@ -6,8 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class PlayerModel extends ChangeNotifier {
-
-  PlayerModel(int id){
+  PlayerModel(int id) {
     this.refreshUserInfo(id);
     this.refreshRecommendList();
   }
@@ -23,23 +22,29 @@ class PlayerModel extends ChangeNotifier {
     data = json.decode(res.body);
     _player = new Player();
     _player = Player.fromJson(data);
-
+    _player.history.sort((a, b) => b.date.compareTo(a.date));
     notifyListeners();
   }
 
   void refreshRecommendList() async {
-    
-      var data;
-      var rest;
-      var res =
-          await http.get(Uri.encodeFull('http://10.0.2.2:53255/api/v1/food/'));
-      data = json.decode(res.body);
-      rest = data as List;
-      _recommendList.clear();
-      _recommendList
-          .addAll(rest.map<Food>((json) => Food.fromJson(json)).toList());
+    var data;
+    var rest;
+    var res =
+        await http.get(Uri.encodeFull('http://10.0.2.2:53255/api/v1/food/'));
+    data = json.decode(res.body);
+    rest = data as List;
+    _recommendList.clear();
+    _recommendList
+        .addAll(rest.map<Food>((json) => Food.fromJson(json)).toList());
 
-      notifyListeners();
+    notifyListeners();
+  }
+
+  void addHistory(Food food,DateTime date) async {
+    _player.history.add(History(food, DateTime.now()));
+    _player.history.sort((a, b) => b.date.compareTo(a.date));
+    var res =
+        await http.post(Uri.encodeFull('http://10.0.2.2:53255/api/v1/users/${_player.pid}/food/${food.fid}/date/$date'));
   }
 
   List<Food> getRecommendList() {
@@ -52,7 +57,6 @@ class PlayerModel extends ChangeNotifier {
 
   List<History> getHistory() {
     return _player.history;
-    
   }
 }
 

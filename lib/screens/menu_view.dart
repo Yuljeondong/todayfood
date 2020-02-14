@@ -3,21 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:todayfood/model/food.dart';
 import 'package:todayfood/model/player.dart';
 import 'package:todayfood/screens/settings.dart';
 import 'package:todayfood/screens/sub_menu_view.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-
 class FoodListView extends StatelessWidget {
   const FoodListView({Key key}) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
     var player = Provider.of<PlayerModel>(context);
-    
-    
+
     //var recommend = player.getRecommendList();
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +25,9 @@ class FoodListView extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: (){player.refreshRecommendList();},
+            onPressed: () {
+              player.refreshRecommendList();
+            },
           ),
           IconButton(
             icon: Icon(Icons.settings),
@@ -42,7 +42,9 @@ class FoodListView extends StatelessWidget {
         child: ListView.builder(
           itemCount: player.getRecommendList().length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(height: 550, child: MenuView(food: player.getRecommendList()[index].name));
+            return Container(
+                height: 550,
+                child: MenuView(food: player.getRecommendList()[index]));
           },
         ),
       ),
@@ -50,11 +52,9 @@ class FoodListView extends StatelessWidget {
   }
 }
 
-
-
 class MenuView extends StatefulWidget {
   MenuView({Key key, this.food}) : super(key: key);
-  final String food;
+  final Food food;
   @override
   _MenuViewState createState() => _MenuViewState();
 }
@@ -78,6 +78,7 @@ class _MenuViewState extends State<MenuView> {
       flags: YoutubePlayerFlags(autoPlay: false));
   @override
   Widget build(BuildContext context) {
+    var player = Provider.of<PlayerModel>(context);
     return Container(
       child: Card(
           //mainAxisAlignment: MainAxisAlignment.center,
@@ -86,15 +87,18 @@ class _MenuViewState extends State<MenuView> {
           child: ListView(
             physics: const NeverScrollableScrollPhysics(),
             children: <Widget>[
+              //음식 이름
               Container(
                 height: 50,
                 padding: EdgeInsets.all(10),
                 child: Text(
-                  '${widget.food}',
+                  '${widget.food.name}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24),
                 ),
               ),
+
+              //유튜브 플레이어
               Container(
                   height: 207,
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -109,6 +113,8 @@ class _MenuViewState extends State<MenuView> {
                       ),
                     ],
                   )),
+
+              //지도
               // Container(
               //   height: 300,
               //   child: Flex(
@@ -132,6 +138,8 @@ class _MenuViewState extends State<MenuView> {
               // ),
               SubMenuView(),
               SubMenuView(),
+
+              //메뉴
               Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: ButtonBar(
@@ -139,7 +147,9 @@ class _MenuViewState extends State<MenuView> {
                   alignment: MainAxisAlignment.center,
                   children: <Widget>[
                     RaisedButton(
-                      onPressed: null,
+                      onPressed: () {
+                        player.addHistory(widget.food,DateTime.now());
+                      },
                       child: Text('메뉴 결정'),
                     )
                   ],
@@ -150,4 +160,9 @@ class _MenuViewState extends State<MenuView> {
           )),
     );
   }
+}
+
+
+bool _showDialog() {
+  
 }
