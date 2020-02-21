@@ -18,7 +18,6 @@ class _PageScrollerState extends State<PageScroller> {
     _controller = PageController(initialPage: 1);
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return PageView(

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todayfood/model/player.dart';
 import 'package:todayfood/screens/page_view.dart';
+import 'package:todayfood/services/location.service.dart';
+
+import 'model/location.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,10 +37,16 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<PlayerModel>(
-      create: (context) => PlayerModel(1),
-      child: PageScroller(
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<PlayerModel>(
+          create: (context) => PlayerModel(1),
+        ),
+        StreamProvider<UserLocation>(
+          create: (context) => LocationService().locationStream,
+        )
+      ],
+      child: PageScroller(),
     );
   }
 }
