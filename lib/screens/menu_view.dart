@@ -43,11 +43,11 @@ class FoodListView extends StatelessWidget {
       body: Container(
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: player.getRecommendList().length,
+          itemCount: player.recommendList.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
                 //height: 550,
-                child: MenuView(food: player.getRecommendList()[index]));
+                child: MenuView(listIndex: index));
           },
         ),
       ),
@@ -56,8 +56,8 @@ class FoodListView extends StatelessWidget {
 }
 
 class MenuView extends StatefulWidget {
-  MenuView({Key key, this.food}) : super(key: key);
-  final Food food;
+  MenuView({Key key, this.listIndex}) : super(key: key);
+  final int listIndex;
   @override
   _MenuViewState createState() => _MenuViewState();
 }
@@ -76,24 +76,7 @@ class _MenuViewState extends State<MenuView> {
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
 
-  List<YoutubePlayerController> _ycontroller = [
-    YoutubePlayerController(
-        initialVideoId: "RT-UHVCcFSA",
-        flags: YoutubePlayerFlags(autoPlay: false)),
-    YoutubePlayerController(
-        initialVideoId: "RT-UHVCcFSA",
-        flags: YoutubePlayerFlags(autoPlay: false)),
-    YoutubePlayerController(
-        initialVideoId: "RT-UHVCcFSA",
-        flags: YoutubePlayerFlags(autoPlay: false)),
-  ];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
+  
   @override
   void _showDialog(PlayerModel player, Food food, DateTime date) {
     showDialog(
@@ -144,7 +127,7 @@ class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
     var player = Provider.of<PlayerModel>(context);
-    var location = Provider.of<UserLocation>(context);
+    //var location = Provider.of<UserLocation>(context);
     return Container(
       child: Card(
           //mainAxisAlignment: MainAxisAlignment.center,
@@ -159,26 +142,34 @@ class _MenuViewState extends State<MenuView> {
                 height: 50,
                 padding: EdgeInsets.all(10),
                 child: Text(
-                  '${widget.food.name}',
+                  '${player.recommendList[widget.listIndex].name}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 24),
                 ),
               ),
-        //Expanded()
+
               //유튜브 플레이어
               Container(
-                  //height: 240,
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: widget.food.youtubeList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return YoutubeTile(food: widget.food, index: index);
-                    },
-                  )
-
-                  ),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: player.recommendList[widget.listIndex].youtubeList.length == 0
+                    ? SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.blue),
+                            strokeWidth: 5.0,
+                          ),
+                        ))
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: player.recommendList[widget.listIndex].youtubeList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return YoutubeTile(food: player.recommendList[widget.listIndex], index: index);
+                        },
+                      ),
+              ),
 
               //지도
               // Container(
@@ -203,7 +194,6 @@ class _MenuViewState extends State<MenuView> {
               //   ),
               // ),
               SubMenuView(),
-              SubMenuView(),
 
               //메뉴
               Container(
@@ -214,7 +204,7 @@ class _MenuViewState extends State<MenuView> {
                   children: <Widget>[
                     RaisedButton(
                       onPressed: () {
-                        _showDialog(player, widget.food, DateTime.now());
+                        _showDialog(player, player.recommendList[widget.listIndex], DateTime.now());
                         //player.addHistory(widget.food, DateTime.now());
                       },
                       child: Text('메뉴 결정'),
@@ -252,6 +242,8 @@ class _YoutubeTileState extends State<YoutubeTile> {
         child: Column(
       children: <Widget>[
         Container(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+          color: Colors.pink[50],
           height: 80,
           child: ListTile(
             leading:
@@ -262,6 +254,7 @@ class _YoutubeTileState extends State<YoutubeTile> {
                   .replaceAll('&quot;', '\"')
                   .replaceAll('&amp;', '&'),
               maxLines: 2,
+              style: TextStyle(fontSize: 14),
             ),
             trailing: IconButton(
                 icon: Icon(
@@ -272,12 +265,24 @@ class _YoutubeTileState extends State<YoutubeTile> {
                 }),
           ),
         ),
-        _playerFlag ? Container(child: YoutubePlayer(
-                            controlsTimeOut: Duration(seconds: 10),
-                            controller: YoutubePlayerController(initialVideoId: widget.food.youtubeList[widget.index].id),
-                            showVideoProgressIndicator: true,
-                            //onReady: () {_ycontroller.addListener();},
-                          ),):Container()
+        _playerFlag
+            ? Container(
+                width: 300,
+                color: Colors.black12,
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: YoutubePlayer(
+                  controlsTimeOut: Duration(seconds: 10),
+                  controller: YoutubePlayerController(
+                    initialVideoId: widget.food.youtubeList[widget.index].id,
+                    flags: YoutubePlayerFlags(
+                      autoPlay: true,
+                    ),
+                  ),
+                  showVideoProgressIndicator: true,
+                  //onReady: () {_ycontroller.addListener();},
+                ),
+              )
+            : Container()
       ],
     ));
   }

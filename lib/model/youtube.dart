@@ -21,6 +21,7 @@ class YoutubeInfoItem {
   final List<YoutubeInfo> _items = [];
 
   void refreshItems(String food) async {
+    _items.clear();
     var data;
     var rest;
     var res = await http.get(Uri.encodeFull(

@@ -13,8 +13,7 @@ class PlayerModel extends ChangeNotifier {
   }
   Player _player;
   var _youtubeInfo = [YoutubeInfoItem(),YoutubeInfoItem(),YoutubeInfoItem(),];
-  var youtubeList = [];
-  List<Food> _recommendList = [];
+  List<Food> recommendList = [];
 
   void refreshUserInfo(int id) async {
     var data;
@@ -29,18 +28,19 @@ class PlayerModel extends ChangeNotifier {
   }
 
   void refreshRecommendList() async {
-    _recommendList.clear();
+    recommendList.clear();
     var data;
     var rest;
     var res =
         await http.get(Uri.encodeFull('http://10.0.2.2:53255/api/v1/food/'));
     data = json.decode(res.body);
     rest = data as List;
-    _recommendList.clear();
-    _recommendList
+    recommendList.clear();
+    recommendList
         .addAll(rest.map<Food>((json) => Food.fromJson(json)).toList());
     int i = 0;
-    for (var item in _recommendList) {
+    for (var item in recommendList) {
+      item.youtubeList = null;
       _youtubeInfo[i].refreshItems(item.name);
       item.youtubeList = _youtubeInfo[i].getItems();
       i++;
@@ -57,7 +57,7 @@ class PlayerModel extends ChangeNotifier {
   }
 
   List<Food> getRecommendList() {
-    return _recommendList;
+    return recommendList;
   }
 
   String getName() {
