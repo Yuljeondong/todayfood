@@ -24,14 +24,16 @@ class YoutubeInfoItem {
     _items.clear();
     var data;
     var rest;
-    var res = await http.get(Uri.encodeFull(
-        'https://www.googleapis.com/youtube/v3/search?key=$youtubeApiKey&part=snippet&q=$food+ 추천&maxResults=3&eventType=completed&safeSearch=moderate&type=video'),headers: {"Accept": "application/json"});
+    //   var res = await http.get(
+    //       Uri.https('www.googleapis.com',
+    //           'youtube/v3/search?key=$youtubeApiKey&part=snippet&q=$food+ 추천&maxResults=3&eventType=completed&safeSearch=moderate&type=video'),
+    //       headers: {"Accept": "application/json"});
 
-    data = json.decode(res.body);
-    rest = data['items'] as List;
-    _items.clear();
-    _items.addAll(
-        rest.map<YoutubeInfo>((json) => YoutubeInfo.fromJson(json)).toList());
+    //   data = json.decode(res.body);
+    //   rest = data['items'] as List;
+    //   _items.clear();
+    //   _items.addAll(
+    //       rest.map<YoutubeInfo>((json) => YoutubeInfo.fromJson(json)).toList());
   }
 
   List<YoutubeInfo> getItems() {

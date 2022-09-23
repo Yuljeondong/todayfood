@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todayfood/model/food.dart';
-import 'package:todayfood/model/location.dart';
 import 'package:todayfood/model/player.dart';
 import 'package:todayfood/model/youtube.dart';
 import 'package:todayfood/screens/settings.dart';
 import 'package:todayfood/screens/sub_menu_view.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class FoodListView extends StatelessWidget {
   const FoodListView({Key key}) : super(key: key);
@@ -63,20 +60,6 @@ class MenuView extends StatefulWidget {
 }
 
 class _MenuViewState extends State<MenuView> {
-  Completer<GoogleMapController> _controller = Completer();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
-  
   @override
   void _showDialog(PlayerModel player, Food food, DateTime date) {
     showDialog(
@@ -105,14 +88,14 @@ class _MenuViewState extends State<MenuView> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("결정"),
               onPressed: () {
                 player.addHistory(food, date);
                 Navigator.pop(context);
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("취소"),
               onPressed: () {
                 Navigator.pop(context);
@@ -149,27 +132,32 @@ class _MenuViewState extends State<MenuView> {
               ),
 
               //유튜브 플레이어
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: player.recommendList[widget.listIndex].youtubeList.length == 0
-                    ? SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(Colors.blue),
-                            strokeWidth: 5.0,
-                          ),
-                        ))
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: player.recommendList[widget.listIndex].youtubeList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return YoutubeTile(food: player.recommendList[widget.listIndex], index: index);
-                        },
-                      ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              //   child:
+              //       player.recommendList[widget.listIndex].youtubeList.length ==
+              //               0
+              //           ? SizedBox(
+              //               width: 50,
+              //               height: 50,
+              //               child: Center(
+              //                 child: CircularProgressIndicator(
+              //                   valueColor: AlwaysStoppedAnimation(Colors.blue),
+              //                   strokeWidth: 5.0,
+              //                 ),
+              //               ))
+              //           : ListView.builder(
+              //               shrinkWrap: true,
+              //               physics: NeverScrollableScrollPhysics(),
+              //               itemCount: player.recommendList[widget.listIndex]
+              //                   .youtubeList.length,
+              //               itemBuilder: (BuildContext context, int index) {
+              //                 return YoutubeTile(
+              //                     food: player.recommendList[widget.listIndex],
+              //                     index: index);
+              //               },
+              //             ),
+              // ),
 
               //지도
               // Container(
@@ -193,7 +181,7 @@ class _MenuViewState extends State<MenuView> {
               //     ],
               //   ),
               // ),
-              SubMenuView(),
+              SubMenuView(listIndex: widget.listIndex),
 
               //메뉴
               Container(
@@ -202,9 +190,12 @@ class _MenuViewState extends State<MenuView> {
                   buttonMinWidth: 500,
                   alignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    RaisedButton(
+                    ElevatedButton(
                       onPressed: () {
-                        _showDialog(player, player.recommendList[widget.listIndex], DateTime.now());
+                        _showDialog(
+                            player,
+                            player.recommendList[widget.listIndex],
+                            DateTime.now());
                         //player.addHistory(widget.food, DateTime.now());
                       },
                       child: Text('메뉴 결정'),
@@ -265,24 +256,7 @@ class _YoutubeTileState extends State<YoutubeTile> {
                 }),
           ),
         ),
-        _playerFlag
-            ? Container(
-                width: 300,
-                color: Colors.black12,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: YoutubePlayer(
-                  controlsTimeOut: Duration(seconds: 10),
-                  controller: YoutubePlayerController(
-                    initialVideoId: widget.food.youtubeList[widget.index].id,
-                    flags: YoutubePlayerFlags(
-                      autoPlay: true,
-                    ),
-                  ),
-                  showVideoProgressIndicator: true,
-                  //onReady: () {_ycontroller.addListener();},
-                ),
-              )
-            : Container()
+        Container()
       ],
     ));
   }

@@ -19,11 +19,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http:
-  youtube_player_flutter: 
-  google_maps_flutter:
+  http: 0.13.5
   provider:
-  location:
   intl:
   flutter_calendar_carousel:
   # The following adds the Cupertino Icons font to your application.

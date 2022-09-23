@@ -42,9 +42,9 @@ class Home extends StatelessWidget {
         ChangeNotifierProvider<PlayerModel>(
           create: (context) => PlayerModel(1),
         ),
-        StreamProvider<UserLocation>(
-          create: (context) => LocationService().locationStream,
-        )
+        // StreamProvider<UserLocation>(
+        //   create: (context) => LocationService().locationStream,
+        // )
       ],
       child: PageScroller(),
     );

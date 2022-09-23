@@ -11,6 +11,6 @@ class Food {
   Food.fromJson(Map<String, dynamic> json)
       : fid = json['fid'],
         name = json['name'],
-        thumbnail = json['thumbnail'],
+        thumbnail = json['thumb'],
         tag = json['tag'];
 }

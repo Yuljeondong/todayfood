@@ -12,13 +12,17 @@ class PlayerModel extends ChangeNotifier {
     this.refreshRecommendList();
   }
   Player _player;
-  var _youtubeInfo = [YoutubeInfoItem(),YoutubeInfoItem(),YoutubeInfoItem(),];
+  var _youtubeInfo = [
+    YoutubeInfoItem(),
+    YoutubeInfoItem(),
+    YoutubeInfoItem(),
+  ];
   List<Food> recommendList = [];
 
   void refreshUserInfo(int id) async {
+    var client = http.Client();
     var data;
-    var res = await http
-        .get(Uri.encodeFull('http://10.0.2.2:53255/api/v1/users/$id'));
+    var res = await client.get(Uri.http('10.0.2.2:53255', 'api/v1/users/$id'));
 
     data = json.decode(res.body);
     _player = new Player();
@@ -29,10 +33,10 @@ class PlayerModel extends ChangeNotifier {
 
   void refreshRecommendList() async {
     recommendList.clear();
+    var client = http.Client();
     var data;
     var rest;
-    var res =
-        await http.get(Uri.encodeFull('http://10.0.2.2:53255/api/v1/food/'));
+    var res = await client.get(Uri.http('10.0.2.2:53255', 'api/v1/food/'));
     data = json.decode(res.body);
     rest = data as List;
     recommendList.clear();
@@ -52,8 +56,8 @@ class PlayerModel extends ChangeNotifier {
   void addHistory(Food food, DateTime date) async {
     _player.history.add(History(food, DateTime.now()));
     _player.history.sort((a, b) => b.date.compareTo(a.date));
-    var res = await http.post(Uri.encodeFull(
-        'http://10.0.2.2:53255/api/v1/users/${_player.pid}/food/${food.fid}/date/$date'));
+    var res = await http.post(Uri.http('10.0.2.2:53255',
+        'api/v1/users/${_player.pid}/food/${food.fid}/date/$date'));
   }
 
   List<Food> getRecommendList() {
@@ -65,6 +69,9 @@ class PlayerModel extends ChangeNotifier {
   }
 
   List<History> getHistory() {
+    if (_player == null) {
+      return List<History>.empty();
+    }
     return _player.history;
   }
 }
