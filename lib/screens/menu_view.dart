@@ -18,6 +18,7 @@ class FoodListView extends StatelessWidget {
     //var recommend = player.getRecommendList();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.pink[300],
         centerTitle: true,
         title: Text("오늘의 메뉴"),
@@ -25,7 +26,7 @@ class FoodListView extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              player.refreshRecommendList();
+              player.refreshRecommendList(player.getPid());
             },
           ),
           IconButton(
@@ -91,7 +92,7 @@ class _MenuViewState extends State<MenuView> {
             new TextButton(
               child: new Text("결정"),
               onPressed: () {
-                player.addHistory(food, date);
+                player.addHistory(player.getPid(), food.fid);
                 Navigator.pop(context);
               },
             ),
@@ -181,7 +182,7 @@ class _MenuViewState extends State<MenuView> {
               //     ],
               //   ),
               // ),
-              SubMenuView(listIndex: widget.listIndex),
+              // SubMenuView(listIndex: widget.listIndex),
 
               //메뉴
               Container(

@@ -1,1 +1,1 @@
-var youtubeApiKey = "AIzaSyDq-XU1yVza_K9J2vA9nmdu6nyJY1knEAI";
+var youtubeApiKey = "AIzaSyDN8BXoKKDtG-zxtDdIunlUawo9HTY8bdc";

@@ -21,10 +21,7 @@ class _PageScrollerState extends State<PageScroller> {
   Widget build(BuildContext context) {
     return PageView(
       controller: _controller,
-      children: <Widget>[
-        FoodListView()
-        // HistoryView(),
-      ],
+      children: <Widget>[HistoryView(), FoodListView()],
     );
   }
 }

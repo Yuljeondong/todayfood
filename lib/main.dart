@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todayfood/model/player.dart';
+import 'package:todayfood/screens/login_view.dart';
 import 'package:todayfood/screens/page_view.dart';
 import 'package:todayfood/services/location.service.dart';
 
@@ -28,19 +29,28 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: Home());
+        home: LoginRoute());
+  }
+}
+
+class LoginRoute extends StatelessWidget {
+  const LoginRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LoginView();
   }
 }
 
 class Home extends StatelessWidget {
-  const Home({Key key}) : super(key: key);
-
+  const Home({Key key, this.userInfo}) : super(key: key);
+  final userInfo;
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<PlayerModel>(
-          create: (context) => PlayerModel(1),
+          create: (context) => PlayerModel(userInfo.pid),
         ),
         // StreamProvider<UserLocation>(
         //   create: (context) => LocationService().locationStream,
